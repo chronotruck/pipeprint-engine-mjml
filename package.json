@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "fastify": "^0.28.2",
+    "mjml": "^3.3.4"
+  }
+}
