@@ -1,6 +1,6 @@
 // Require the framework and instantiate it
 const fastify = require('fastify')();
-import { mjml2html } from 'mjml';
+const mjml2html = require('mjml').mjml2html;
 
 process.on('SIGINT', function() {
     process.exit();
@@ -18,7 +18,7 @@ fastify.post('/render', function (request, reply) {
 });
 
 // Run the server!
-fastify.listen(3000, function (err) {
+fastify.listen(80, function (err) {
     if (err) throw err;
     console.log(`server listening on ${fastify.server.address().port}`)
 });
