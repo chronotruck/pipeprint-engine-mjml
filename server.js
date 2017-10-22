@@ -1,20 +1,53 @@
 // Require the framework and instantiate it
 const fastify = require('fastify')();
-const mjml2html = require('mjml').mjml2html;
+const mjml = require('mjml');
 
 process.on('SIGINT', function() {
     process.exit();
 });
 
 fastify.post('/render', function (request, reply) {
-    let template = request.body.files[request.body.template];
+    try {
+        let template = request.body.files[request.body.template];
 
-    reply
-        .code(200)
-        .type('text/plain')
-        .send(
-            mjml2html(template).html
-        );
+        let rendered;
+        try {
+            rendered = mjml.mjml2html(template).html;
+        } catch (e) {
+            console.log(e);
+            reply
+                .code(400)
+                .type('application/problem+json')
+                .send(
+                    JSON.stringify(
+                        {
+                            title: "MJML Error",
+                            detail: e.message
+                        }
+                    )
+                );
+            return;
+        }
+
+        reply
+            .code(200)
+            .type('text/html')
+            .send(rendered);
+
+    } catch (e) {
+        reply
+            .code(500)
+            .type('application/problem+json')
+            .send(
+                JSON.stringify(
+                    {
+                        title: "Server Error"
+                        // detail: e.message
+                    }
+                )
+            );
+
+    }
 });
 
 // Run the server!
