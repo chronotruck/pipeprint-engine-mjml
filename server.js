@@ -12,7 +12,7 @@ fastify.post('/render', function (request, reply) {
 
         let rendered;
         try {
-            rendered = mjml.mjml2html(template).html;
+            rendered = mjml(template).html;
         } catch (e) {
             console.log(e);
             reply
@@ -35,6 +35,7 @@ fastify.post('/render', function (request, reply) {
             .send(rendered);
 
     } catch (e) {
+        console.log(e);
         reply
             .code(500)
             .type('application/problem+json')
@@ -51,7 +52,7 @@ fastify.post('/render', function (request, reply) {
 });
 
 // Run the server!
-fastify.listen(80, function (err) {
+fastify.listen(80, '0.0.0.0', function (err) {
     if (err) throw err;
     console.log(`server listening on ${fastify.server.address().port}`)
 });
