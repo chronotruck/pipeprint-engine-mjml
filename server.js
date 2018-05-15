@@ -6,7 +6,7 @@ process.on('SIGINT', function() {
     process.exit();
 });
 
-fastify.post('/render', function (request, reply) {
+fastify.post('/render', { bodyLimit: 10485760 }, function (request, reply) {
     try {
         let template = request.body.files[request.body.template];
 
